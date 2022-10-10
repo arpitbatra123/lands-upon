@@ -76,8 +76,8 @@ module.exports = async function getImages() {
                 id: `https://lands-upon.netlify.app/${file}`,
                 link: `https://lands-upon.netlify.app/#${file}`,
                 date: new Date(date),
-                content: `<img src='https://lands-upon.netlify.app/${file}'>`,
-                description: `<img src='https://lands-upon.netlify.app/${file}'>`
+                content: `<img src='https://lands-upon.netlify.app/assets/images/${file}'>`,
+                description: `<img src='https://lands-upon.netlify.app/assets/images/${file}'>`
             });
         }
 
