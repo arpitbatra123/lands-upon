@@ -4,4 +4,4 @@
 
 # npm i @ayoisaiah/f2 -g is needed to use this script
 
-f2 -x -r '{{x.dt.MMM}}-{{x.dt.DD}}-{{x.dt.YYYY}}-{{x.dt.hh}}-{{x.dt.mm}}-{{x.dt.ss}}-{{x.dt.A}}{{ext}}' -E 'json' $1
+f2 --exec --replace '{{x.cdt.MMM}}-{{x.cdt.DD}}-{{x.cdt.YYYY}}-{{x.cdt.hh}}-{{x.cdt.mm}}-{{x.cdt.ss}}-{{x.cdt.A}}{{ext}}' -E 'json' $1
