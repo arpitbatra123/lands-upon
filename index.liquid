@@ -69,7 +69,9 @@
         </div>
         <div class="map">
           <!-- @todo: hide token-->
-          <img src="{{ image.gpsImage }}" loading="lazy" alt="{{ image.name }}" />
+          <a href="https://www.google.com/maps?q={{image.LAT}},{{image.LON}}" target="_blank">
+            <img src="{{ image.gpsImage }}" loading="lazy" alt="{{ image.name }}" />
+          </a>
           <span>
             {{ image.name }}
           </span>
