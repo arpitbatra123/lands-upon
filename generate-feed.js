@@ -8,13 +8,13 @@ const fs = require('fs').promises,
 const feed = new Feed({
     title: 'Lands Upon',
     description: 'A photo blog of the lands that @arpitbatra123 has walked upon',
-    id: 'https://lands-upon.netlify.app/',
-    link: 'https://lands-upon.netlify.app/',
+    id: 'https://lands-upon.vercel.app/',
+    link: 'https://lands-upon.vercel.app/',
     language: 'en',
-    image: 'https://lands-upon.netlify.app/og.jpg',
-    favicon: 'https://lands-upon.netlify.app/favicon.ico',
+    image: 'https://lands-upon.vercel.app/og.jpg',
+    favicon: 'https://lands-upon.vercel.app/favicon.ico',
     feedLinks: {
-        rss: 'https://lands-upon.netlify.app/feed.xml',
+        rss: 'https://lands-upon.vercel.app/feed.xml',
     },
     author: {
         name: 'Arpit Batra',
@@ -78,11 +78,11 @@ async function generateFeed() {
             
             return {
                 title: `${name} - ${formattedDate}`,
-                id: `https://lands-upon.netlify.app/${file}`,
-                link: `https://lands-upon.netlify.app/#${file}`,
+                id: `https://lands-upon.vercel.app/${file}`,
+                link: `https://lands-upon.vercel.app/#${file}`,
                 date: date,
-                content: `<img src='https://lands-upon.netlify.app/assets/images/${file}'>`,
-                description: `<img src='https://lands-upon.netlify.app/assets/images/${file}'>`
+                content: `<img src='https://lands-upon.vercel.app/assets/images/${file}' alt='${name}' style='max-width: 100%; height: auto;'>`,
+                description: `<img src='https://lands-upon.vercel.app/assets/images/${file}' alt='${name}' style='max-width: 100%; height: auto;'>`
             };
         }
         
