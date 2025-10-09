@@ -69,20 +69,5 @@ module.exports = async function getImages() {
     let finalData = await Promise.all(files);
     finalData = finalData.filter((item) => item.gps).sort((a, b) => a.date.getTime() - b.date.getTime());
     
-    // Calculate stats
-    const stats = {
-        totalPhotos: finalData.length,
-        uniqueLocations: new Set(finalData.map(item => item.name)).size,
-        dateRange: finalData.length > 0 ? {
-            earliest: finalData[0].date,
-            latest: finalData[finalData.length - 1].date
-        } : null,
-        countries: new Set(finalData.map(item => {
-            // Extract country from location name (usually the last part)
-            const parts = item.name.split(', ');
-            return parts[parts.length - 1];
-        })).size
-    };
-    
     return finalData;
 };
