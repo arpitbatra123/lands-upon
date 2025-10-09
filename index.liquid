@@ -57,6 +57,28 @@
       the woods were lovely dark and deep, <br />
       but i had promises to keep
     </p>
+    
+    <div class="stats">
+      <div class="stat-item">
+        <span class="stat-number">{{ stats.totalPhotos }}</span>
+        <span class="stat-label">Photos</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">{{ stats.uniqueLocations }}</span>
+        <span class="stat-label">Locations</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">{{ stats.countries }}</span>
+        <span class="stat-label">Countries</span>
+      </div>
+      {% if stats.dateRange %}
+      <div class="stat-item">
+        <span class="stat-number">{{ stats.dateRange.earliest | date: '%Y' }} - {{ stats.dateRange.latest | date: '%Y' }}</span>
+        <span class="stat-label">Years</span>
+      </div>
+      {% endif %}
+    </div>
+    
     <ul role="list" class="timeline">
       <!-- Empty image alts until i can find a better way to caption them -->
       {% for image in images reversed %} {% if image.gps.longitude %}

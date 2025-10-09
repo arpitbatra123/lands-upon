@@ -32,6 +32,69 @@ main {
     margin-top: 2rem;
   }
 
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
+    padding: 2rem;
+    background: #f8f8f8;
+    border-radius: 8px;
+    box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.1);
+
+    @media screen and (prefers-color-scheme: dark) {
+      background: #2a2a2a;
+      color: #c3edb5;
+    }
+
+    @include mobile {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin: 2rem 0;
+      padding: 1.5rem;
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+
+      .stat-number {
+        font-family: 'Jost', Arial, Helvetica, sans-serif;
+        font-size: 2.5rem;
+        font-weight: 600;
+        line-height: 1;
+        margin-bottom: 0.5rem;
+        color: #333;
+
+        @media screen and (prefers-color-scheme: dark) {
+          color: #c3edb5;
+        }
+
+        @include mobile {
+          font-size: 2rem;
+        }
+      }
+
+      .stat-label {
+        font-family: 'Space Mono', monospace;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #666;
+
+        @media screen and (prefers-color-scheme: dark) {
+          color: #a0a0a0;
+        }
+
+        @include mobile {
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+
   .timeline {
     margin-top: 2rem;
   }

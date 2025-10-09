@@ -4,7 +4,7 @@
   "description": "",
   "main": ".eleventy.js",
   "scripts": {
-    "build": "eleventy && npm run sass",
+    "build": "eleventy && npm run sass && node generate-feed.js",
     "serve": "concurrently  'eleventy --serve' 'npm run sass:watch' --success",
     "sass": "sass styles/:_site/styles/ --no-source-map --style=compressed --update",
     "sass:watch": "npm run sass && npm run sass -- -w",
