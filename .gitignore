@@ -13,3 +13,6 @@ Thumbs.db
 node_modules
 _site
 src/_includes/css
+
+# Build artifacts
+feed.xml
