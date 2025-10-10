@@ -51,10 +51,9 @@ The original implementation had several issues causing excessive Mapbox API usag
 
 The optimization is transparent - no changes needed to existing code. The cache file is automatically created and maintained.
 
-### Environment Variables (Optional)
-```bash
-export MAPBOX_TOKEN="your_token_here"
-```
+### API Token
+- Uses hardcoded Mapbox token for simplicity
+- Token is centralized in `_data/utils.js` only
 
 ### Cache Management
 - Cache file: `_data/.geocoding-cache.json`
