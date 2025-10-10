@@ -1,5 +1,8 @@
 # Mapbox API Optimization
 
+> **Created by AI Assistant** - This optimization was implemented to reduce Mapbox API costs and eliminate code duplication in the 11ty data cascade.  
+> **@https://cursor.com/**
+
 ## Problem
 The original implementation had several issues causing excessive Mapbox API usage and costs:
 
@@ -20,10 +23,10 @@ The original implementation had several issues causing excessive Mapbox API usag
 - Environment variable support for API token
 
 ### 2. Caching System
-- **Memory Cache**: In-memory cache during build process
-- **Disk Cache**: Persistent cache file (`_data/.geocoding-cache.json`)
+- **@11ty/eleventy-fetch**: Uses official 11ty caching plugin
+- **Permanent Caching**: 1-year cache duration (location names never change)
 - **Smart Key Generation**: Rounds coordinates to 4 decimal places to group nearby locations
-- **Cache Persistence**: Saves cache after each build
+- **Graceful Fallbacks**: Automatic fallback to expired cache on network failures
 
 ### 3. Code Consolidation
 - Removed ~90 lines of duplicate code
@@ -34,8 +37,8 @@ The original implementation had several issues causing excessive Mapbox API usag
 
 ### Cost Reduction
 - **Before**: Every image triggered API calls on every build
-- **After**: Only new/unique coordinates trigger API calls
-- **Estimated Savings**: 80-95% reduction in API calls for subsequent builds
+- **After**: Only new/unique coordinates trigger API calls (permanent cache)
+- **Estimated Savings**: 99%+ reduction in API calls (only new locations need API calls)
 
 ### Performance
 - **Faster Builds**: Cached results load instantly

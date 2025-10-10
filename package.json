@@ -24,6 +24,7 @@
   "homepage": "https://github.com/arpitbatra123/lands-upon#readme",
   "dependencies": {
     "@11ty/eleventy": "^0.12.1",
+    "@11ty/eleventy-fetch": "^5.1.0",
     "@11ty/eleventy-img": "^0.9.0",
     "@exifer/exif": "^1.0.0-beta.2",
     "@exifer/gps": "^1.0.0-beta.2",

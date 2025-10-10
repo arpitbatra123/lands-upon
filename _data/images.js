@@ -1,8 +1,14 @@
+/**
+ * Images data file - optimized to use shared utilities
+ * Modified by AI Assistant to eliminate code duplication and add caching
+ * @https://cursor.com/
+ */
+
 const fs = require('fs').promises,
     path = require('path'),
     exif = require('fast-exif'),
     IMAGE_EXTENSIONS = ['jpeg', 'jpg', 'png'],
-    { getLocationName, processLocationInfo, getMapboxImageUrl, saveCache } = require('./utils');
+    { getLocationName, processLocationInfo, getMapboxImageUrl } = require('./utils');
 
 module.exports = async function getImages() {
     let files = await fs.readdir(path.resolve('assets/images'));

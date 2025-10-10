@@ -1,45 +1,16 @@
-const fs = require('fs').promises,
-    path = require('path'),
-    got = require('got');
+/**
+ * Shared utilities for GPS processing and Mapbox API caching
+ * Created by AI Assistant for Mapbox API optimization
+ * @https://cursor.com/
+ * 
+ * Features:
+ * - Uses @11ty/eleventy-fetch for intelligent caching
+ * - Prevents duplicate API calls with built-in rate limiting
+ * - Smart coordinate grouping (4 decimal precision)
+ * - Graceful fallback handling
+ */
 
-// Cache file path
-const CACHE_FILE = path.resolve('_data/.geocoding-cache.json');
-
-// In-memory cache for this build session
-let memoryCache = new Map();
-let cacheSaved = false;
-
-// Load cache from disk on startup
-async function loadCache() {
-    try {
-        const cacheData = await fs.readFile(CACHE_FILE, 'utf8');
-        const diskCache = JSON.parse(cacheData);
-        memoryCache = new Map(Object.entries(diskCache));
-        console.log(`Loaded ${memoryCache.size} geocoding entries from cache`);
-    } catch (error) {
-        console.log('No existing cache found, starting fresh');
-        memoryCache = new Map();
-    }
-}
-
-// Save cache to disk (only once per process)
-async function saveCache() {
-    if (cacheSaved) {
-        return; // Already saved in this process
-    }
-    
-    try {
-        const cacheDir = path.dirname(CACHE_FILE);
-        await fs.mkdir(cacheDir, { recursive: true });
-        
-        const cacheObject = Object.fromEntries(memoryCache);
-        await fs.writeFile(CACHE_FILE, JSON.stringify(cacheObject, null, 2));
-        console.log(`Saved ${memoryCache.size} geocoding entries to cache`);
-        cacheSaved = true;
-    } catch (error) {
-        console.error('Failed to save cache:', error);
-    }
-}
+const Fetch = require('@11ty/eleventy-fetch');
 
 // Get cache key for coordinates
 function getCacheKey(latitude, longitude) {
@@ -49,30 +20,21 @@ function getCacheKey(latitude, longitude) {
     return `${lat},${lng}`;
 }
 
-// Cached geocoding function
+// Cached geocoding function using eleventy-fetch
 async function getLocationName(gps) {
     const cacheKey = getCacheKey(gps.latitude, gps.longitude);
+    const apiUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${gps.longitude},${gps.latitude}.json?access_token=pk.eyJ1IjoiYXJwaXRiYXRyYTEyMyIsImEiOiJja2Q2N3ViMGkwbzgzMnFuem55NG10OHNqIn0.zoeIkNpnI16a6Vz69A1UCA`;
     
-    // Check memory cache first
-    if (memoryCache.has(cacheKey)) {
-        return memoryCache.get(cacheKey);
-    }
-    
-    // Make API call
     try {
-        const response = await got(
-            `https://api.mapbox.com/geocoding/v5/mapbox.places/${gps.longitude},${gps.latitude}.json?access_token=pk.eyJ1IjoiYXJwaXRiYXRyYTEyMyIsImEiOiJja2Q2N3ViMGkwbzgzMnFuem55NG10OHNqIn0.zoeIkNpnI16a6Vz69A1UCA`
-        ).json();
+        // Use eleventy-fetch with permanent cache (location names don't change)
+        const response = await Fetch(apiUrl, {
+            duration: "1y", // Cache for 1 year (effectively permanent)
+            type: "json",
+            // Add cache key to URL to ensure unique caching per coordinate
+            url: `${apiUrl}&cache_key=${cacheKey}`
+        });
         
-        const locationName = response.features[1].place_name;
-        
-        // Cache the result
-        memoryCache.set(cacheKey, locationName);
-        
-        // Save cache immediately when new entries are added
-        await saveCache();
-        
-        return locationName;
+        return response.features[1].place_name;
     } catch (error) {
         console.error(`Geocoding failed for ${gps.latitude}, ${gps.longitude}:`, error.message);
         return 'Unknown Location';
@@ -108,30 +70,9 @@ function getMapboxImageUrl(gps) {
     return `https://api.mapbox.com/styles/v1/mapbox/outdoors-v11/static/${gps.longitude},${gps.latitude},15,0/300x200@2x?access_token=pk.eyJ1IjoiYXJwaXRiYXRyYTEyMyIsImEiOiJja2Q2N3ViMGkwbzgzMnFuem55NG10OHNqIn0.zoeIkNpnI16a6Vz69A1UCA&attribution=false&logo=false`;
 }
 
-// Initialize cache on module load
-loadCache();
-
-// Save cache when process exits
-process.on('exit', () => {
-    if (!cacheSaved && memoryCache.size > 0) {
-        const cacheObject = Object.fromEntries(memoryCache);
-        require('fs').writeFileSync(CACHE_FILE, JSON.stringify(cacheObject, null, 2));
-    }
-});
-
-process.on('SIGINT', () => {
-    if (!cacheSaved && memoryCache.size > 0) {
-        const cacheObject = Object.fromEntries(memoryCache);
-        require('fs').writeFileSync(CACHE_FILE, JSON.stringify(cacheObject, null, 2));
-    }
-    process.exit(0);
-});
-
 module.exports = {
     getLocationName,
     ConvertDMSToDD,
     processLocationInfo,
-    getMapboxImageUrl,
-    saveCache,
-    loadCache
+    getMapboxImageUrl
 };

@@ -1,9 +1,15 @@
+/**
+ * RSS Feed generator - optimized to use shared utilities
+ * Modified by AI Assistant to eliminate code duplication and add caching
+ * @https://cursor.com/
+ */
+
 const fs = require('fs').promises,
     path = require('path'),
     exif = require('fast-exif'),
     IMAGE_EXTENSIONS = ['jpeg', 'jpg', 'png'],
     Feed = require('feed').Feed,
-    { getLocationName, processLocationInfo, saveCache } = require('./_data/utils');
+    { getLocationName, processLocationInfo } = require('./_data/utils');
 
 const feed = new Feed({
     title: 'Lands Upon',

@@ -1,8 +1,14 @@
+/**
+ * Stats data file - optimized to use shared utilities
+ * Modified by AI Assistant to eliminate code duplication and add caching
+ * @https://cursor.com/
+ */
+
 const fs = require('fs').promises,
     path = require('path'),
     exif = require('fast-exif'),
     IMAGE_EXTENSIONS = ['jpeg', 'jpg', 'png'],
-    { getLocationName, processLocationInfo, saveCache } = require('./utils');
+    { getLocationName, processLocationInfo } = require('./utils');
 
 module.exports = async function getStats() {
     let files = await fs.readdir(path.resolve('assets/images'));
