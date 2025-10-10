@@ -73,9 +73,6 @@ async function generateFeed() {
         });
     });
     
-    // Save cache after processing all images
-    await saveCache();
-    
     // Write the feed to the _site directory
     await fs.writeFile(path.resolve('_site/feed.xml'), feed.rss2());
     console.log('Feed generated successfully');

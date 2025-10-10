@@ -34,9 +34,6 @@ module.exports = async function getStats() {
     let finalData = await Promise.all(files);
     finalData = finalData.filter((item) => item.gps).sort((a, b) => a.date.getTime() - b.date.getTime());
     
-    // Save cache after processing all images
-    await saveCache();
-    
     // Calculate stats
     const stats = {
         totalPhotos: finalData.length,

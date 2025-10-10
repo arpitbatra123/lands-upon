@@ -7,6 +7,7 @@ const CACHE_FILE = path.resolve('_data/.geocoding-cache.json');
 
 // In-memory cache for this build session
 let memoryCache = new Map();
+let cacheSaved = false;
 
 // Load cache from disk on startup
 async function loadCache() {
@@ -21,8 +22,12 @@ async function loadCache() {
     }
 }
 
-// Save cache to disk
+// Save cache to disk (only once per process)
 async function saveCache() {
+    if (cacheSaved) {
+        return; // Already saved in this process
+    }
+    
     try {
         const cacheDir = path.dirname(CACHE_FILE);
         await fs.mkdir(cacheDir, { recursive: true });
@@ -30,6 +35,7 @@ async function saveCache() {
         const cacheObject = Object.fromEntries(memoryCache);
         await fs.writeFile(CACHE_FILE, JSON.stringify(cacheObject, null, 2));
         console.log(`Saved ${memoryCache.size} geocoding entries to cache`);
+        cacheSaved = true;
     } catch (error) {
         console.error('Failed to save cache:', error);
     }
@@ -62,6 +68,9 @@ async function getLocationName(gps) {
         
         // Cache the result
         memoryCache.set(cacheKey, locationName);
+        
+        // Save cache immediately when new entries are added
+        await saveCache();
         
         return locationName;
     } catch (error) {
@@ -101,6 +110,22 @@ function getMapboxImageUrl(gps) {
 
 // Initialize cache on module load
 loadCache();
+
+// Save cache when process exits
+process.on('exit', () => {
+    if (!cacheSaved && memoryCache.size > 0) {
+        const cacheObject = Object.fromEntries(memoryCache);
+        require('fs').writeFileSync(CACHE_FILE, JSON.stringify(cacheObject, null, 2));
+    }
+});
+
+process.on('SIGINT', () => {
+    if (!cacheSaved && memoryCache.size > 0) {
+        const cacheObject = Object.fromEntries(memoryCache);
+        require('fs').writeFileSync(CACHE_FILE, JSON.stringify(cacheObject, null, 2));
+    }
+    process.exit(0);
+});
 
 module.exports = {
     getLocationName,

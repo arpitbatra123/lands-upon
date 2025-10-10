@@ -37,8 +37,5 @@ module.exports = async function getImages() {
     let finalData = await Promise.all(files);
     finalData = finalData.filter((item) => item.gps).sort((a, b) => a.date.getTime() - b.date.getTime());
     
-    // Save cache after processing all images
-    await saveCache();
-    
     return finalData;
 };
