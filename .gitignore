@@ -16,3 +16,6 @@ src/_includes/css
 
 # Build artifacts
 feed.xml
+
+# Cache files
+_data/.geocoding-cache.json
