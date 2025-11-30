@@ -25,6 +25,7 @@ const feed = new Feed({
     author: {
         name: 'Arpit Batra',
         email: 'arpitbatra123@gmail.com',
+        link: 'https://arpit.tk'
     }
 });
 
